@@ -1,0 +1,25 @@
+syntax = 'proto3';
+
+service FaceRecognition {
+  rpc run (Payload) returns (Response) {}
+}
+
+message Payload {
+  bytes image = 1;
+}
+
+message Response {
+  message Location {
+    uint32 xmin = 1;
+    uint32 ymin = 2;
+    uint32 xmax = 3;
+    uint32 ymax = 4;
+  }
+  message Detection {
+    Location location = 1;
+    string name = 2;
+    bool known = 3;
+  }
+
+  repeated Detection detections = 1;
+}
