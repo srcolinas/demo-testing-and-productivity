@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import facerec_pb2 as facerec__pb2
+import facerec_pb2s.facerec_pb2 as facerec__pb2
 
 
 class FaceRecognitionStub(object):
