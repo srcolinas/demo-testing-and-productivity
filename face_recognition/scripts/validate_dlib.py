@@ -63,14 +63,12 @@ faces_folder_path = sys.argv[3]
 detector = dlib.get_frontal_face_detector()
 sp = dlib.shape_predictor(predictor_path)
 facerec = dlib.face_recognition_model_v1(face_rec_model_path)
-
 win = dlib.image_window()
 
 # Now process all the images
 for f in glob.glob(os.path.join(faces_folder_path, "*.jpg")):
     print("Processing file: {}".format(f))
     img = dlib.load_rgb_image(f)
-    import pdb; pdb.set_trace()
 
     win.clear_overlay()
     win.set_image(img)
@@ -87,6 +85,7 @@ for f in glob.glob(os.path.join(faces_folder_path, "*.jpg")):
             k, d.left(), d.top(), d.right(), d.bottom()))
         # Get the landmarks/parts for the face in box d.
         shape = sp(img, d)
+        import pdb; pdb.set_trace()
         # Draw the face landmarks on the screen so we can see what face is currently being processed.
         win.clear_overlay()
         win.add_overlay(d)
@@ -127,7 +126,8 @@ for f in glob.glob(os.path.join(faces_folder_path, "*.jpg")):
         print("Computing descriptor on aligned image ..")
         
         # Let's generate the aligned image using get_face_chip
-        face_chip = dlib.get_face_chip(img, shape)        
+        face_chip = dlib.get_face_chip(img, shape)
+        import pdb; pdb.set_trace()    
 
         # Now we simply pass this chip (aligned image) to the api
         face_descriptor_from_prealigned_image = facerec.compute_face_descriptor(face_chip)                

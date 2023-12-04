@@ -5,7 +5,10 @@ import grpc
 from facerec_pb2s import facerec_pb2
 from facerec_pb2s import facerec_pb2_grpc
 
-from facerec.detector import Detector
+from facerec.recognizer import Recognizer
+from facerec.finder import find_weights_and_descriptors
+from facerec.load_descriptors import load_descriptors
+from facerec.face_descriptor import DlibFaceDescriptorComputer
 from facerec.settings import Settings
 
 
@@ -15,22 +18,31 @@ class Service(facerec_pb2_grpc.FaceRecognitionServicer):
         self._settings = settings
 
     def run(self, request: facerec_pb2.Payload, context):
-        detector = Detector.load(self._settings.models_dir)
-        detection = detector.detect(request.image)
-        return facerec_pb2.Response(
-            detections=[
-                facerec_pb2.Response.Detection(
-                    location=facerec_pb2.Response.Location(
-                        xmin=detection.location.xmin,
-                        ymin=detection.location.ymin,
-                        xmax=detection.location.xmax,
-                        ymax=detection.location.ymax,
-                    ),
-                    name=detection.name,
-                    known=detection.known,
-                )
-            ]
+        face, shape, descriptors = find_weights_and_descriptors(
+            self._settings.models_dir
         )
+        rec = Recognizer(
+            known_people=load_descriptors(*descriptors),
+            descriptor_computer=DlibFaceDescriptorComputer(shape, face),
+        )
+        result = [
+            facerec_pb2.Response(
+                detections=[
+                    facerec_pb2.Response.Detection(
+                        location=facerec_pb2.Response.Location(
+                            xmin=det.location.xmin,
+                            ymin=det.location.ymin,
+                            xmax=det.location.xmax,
+                            ymax=det.location.ymax,
+                        ),
+                        name=det.name,
+                        known=det.known,
+                    )
+                ]
+            )
+            for det in rec(request.image)
+        ]
+        return result
 
 
 def serve(settings: Settings):
