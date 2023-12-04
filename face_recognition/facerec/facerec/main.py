@@ -22,27 +22,24 @@ class Service(facerec_pb2_grpc.FaceRecognitionServicer):
             self._settings.models_dir
         )
         rec = Recognizer(
-            known_people=load_descriptors(*descriptors),
+            known_people=load_descriptors(**descriptors),
             descriptor_computer=DlibFaceDescriptorComputer(shape, face),
         )
-        result = [
-            facerec_pb2.Response(
-                detections=[
-                    facerec_pb2.Response.Detection(
-                        location=facerec_pb2.Response.Location(
-                            xmin=det.location.xmin,
-                            ymin=det.location.ymin,
-                            xmax=det.location.xmax,
-                            ymax=det.location.ymax,
-                        ),
-                        name=det.name,
-                        known=det.known,
-                    )
-                ]
+
+        detections = [
+            facerec_pb2.Response.Detection(
+                location=facerec_pb2.Response.Location(
+                    xmin=det.location.xmin,
+                    ymin=det.location.ymin,
+                    xmax=det.location.xmax,
+                    ymax=det.location.ymax,
+                ),
+                name=det.name,
+                known=det.known,
             )
             for det in rec(request.image)
         ]
-        return result
+        return facerec_pb2.Response(detections=detections)
 
 
 def serve(settings: Settings):

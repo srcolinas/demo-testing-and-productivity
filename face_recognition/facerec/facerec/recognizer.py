@@ -20,7 +20,7 @@ class Detection:
     known: bool
 
 
-ImageType = Annotated[np.ndarray, ("hight", "width", 3)]
+ImageType = Annotated[np.ndarray, ("hight", "width", 3, np.uint8)]
 Descriptor = Annotated[np.ndarray, ("length",)]
 DescriptorBatch = Annotated[np.ndarray, ("N", "length")]
 
