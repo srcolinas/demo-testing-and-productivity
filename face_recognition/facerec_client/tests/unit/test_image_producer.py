@@ -1,5 +1,3 @@
-from typing import Sequence
-
 import pytest
 import numpy as np
 
@@ -67,7 +65,7 @@ def image():
 
 class _Visualizer:
     def __init__(self) -> None:
-        self.history = []
+        self.history: list[ImageType] = []
         self.destroyed = False
 
     def show(self, image: ImageType, /) -> None:
@@ -78,7 +76,7 @@ class _Visualizer:
 
 
 class _Camera:
-    def __init__(self, reads: Sequence[tuple[bool, ImageType]]) -> None:
+    def __init__(self, reads: list[tuple[bool, ImageType]]) -> None:
         self.released = False
         self._reads = reads
 

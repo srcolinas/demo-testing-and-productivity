@@ -1,11 +1,11 @@
 import cv2
 
-from facerec_client.image_producer import Signals
+from facerec_client.image_producer import Signal
 
 
-def read_signal() -> Signals:
+def read_signal() -> Signal:
     k = cv2.waitKey(1)
     if k % 256 == 27:
         # ESC pressed
-        return Signals.STOP
-    return Signals.CONTINUE
+        return Signal.STOP
+    return Signal.CONTINUE
