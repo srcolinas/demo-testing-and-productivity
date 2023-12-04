@@ -17,6 +17,7 @@ opencv-python = "^4.8.1.78"
 ruff = "^0.1.6"
 mypy = "^1.7.1"
 pytest = "^7.4.3"
+ipython = "^8.18.1"
 
 [build-system]
 requires = ["poetry-core"]
