@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "facerec-generate-descriptors"
+version = "0.1.0"
+description = ""
+authors = ["Sebastian Rodriguez Colina <srcolinas@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+facerec = {path = "../facerec"}
+facerec-client = {path = "../facerec_client"}
+ruff = "^0.1.7"
+mypy = "^1.7.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+facerec-generate-descriptors = "facerec_generate_descriptors.main:_main"
+
+[[tool.mypy.overrides]]
+module = "facerec_pb2s.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "grpc.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "dlib.*"
+ignore_missing_imports = true

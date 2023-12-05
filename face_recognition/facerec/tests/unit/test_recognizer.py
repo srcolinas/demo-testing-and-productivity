@@ -42,6 +42,7 @@ def test_detection_if_distance_above_05(image: bytes):
     )
 
 
+
 @pytest.fixture
 def image() -> bytes:
     arr = np.zeros((10, 10, 3), np.uint8)

@@ -6,20 +6,17 @@ from typing import NamedTuple
 class _Findings(NamedTuple):
     face_weights: Path
     shape_weights: Path
-    descriptors: dict[str, Path]
 
 
-def find_weights_and_descriptors(location: Path, /) -> _Findings:
+def find_weights(location: Path, /) -> _Findings:
     """Finds the latest version of the models' weights.
 
     The following contents need to be in the location provided:
         1. shape_predictor_{version}_.dat
         2. face_recognition_{version}_.dat
-        3. descriptor_{name}_{version}_.npz
 
     Where  {version} should be replaced by an integer indicating the
-    version of the data file. For {name}, you include the name of each known
-    person.
+    version of the data file.
     """
     faces: list[Path] = []
     shapes: list[Path] = []
@@ -31,6 +28,19 @@ def find_weights_and_descriptors(location: Path, /) -> _Findings:
 
     face = sorted(faces, key=lambda x: x.name.split("_")[-2])[-1]
     shape = sorted(shapes, key=lambda x: x.name.split("_")[-2])[-1]
+    return _Findings(face, shape)
+
+
+def find_descriptors(location: Path, /) -> dict[str, Path]:
+    """Finds the latest version of the known descriptors.
+
+    The location should contain files named like
+    descriptor_{name}_{version}_.npz
+
+    Where  {version} should be replaced by an integer indicating the
+    version of the descriptor file and insteade of {name} you include the name
+    of each known person (the name associated to such descriptor).
+    """
 
     versions: dict[str, list[str]] = defaultdict(list)
     descriptors = list(location.glob("*_.npz"))
@@ -48,4 +58,4 @@ def find_weights_and_descriptors(location: Path, /) -> _Findings:
                 ):
                     yield (k, d)
 
-    return _Findings(face, shape, dict(helper()))
+    return dict(helper())

@@ -6,7 +6,7 @@ from facerec_pb2s import facerec_pb2
 from facerec_pb2s import facerec_pb2_grpc
 
 from facerec.recognizer import Recognizer
-from facerec.finder import find_weights_and_descriptors
+from facerec.finder import find_weights, find_descriptors
 from facerec.load_descriptors import load_descriptors
 from facerec.face_descriptor import DlibFaceDescriptorComputer
 from facerec.settings import Settings
@@ -18,9 +18,8 @@ class Service(facerec_pb2_grpc.FaceRecognitionServicer):
         self._settings = settings
 
     def run(self, request: facerec_pb2.Payload, context):
-        face, shape, descriptors = find_weights_and_descriptors(
-            self._settings.models_dir
-        )
+        face, shape = find_weights(self._settings.models_dir)
+        descriptors = find_descriptors(self._settings.descriptors_dir)
         rec = Recognizer(
             known_people=load_descriptors(**descriptors),
             descriptor_computer=DlibFaceDescriptorComputer(shape, face),
