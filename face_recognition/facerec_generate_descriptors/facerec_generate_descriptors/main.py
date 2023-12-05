@@ -16,10 +16,12 @@ def _main():
     settings = Settings()
     face, shape = find_weights(settings.models_dir)
     computer = DlibFaceDescriptorComputer(shape, face)
-    produce_images(
-        cv2.VideoCapture(0),
-        VisualizerWithComputerAndStorage(computer),
-        read_signal()
+    list(
+        produce_images(
+            cv2.VideoCapture(0),
+            VisualizerWithComputerAndStorage(computer),
+            read_signal()
+        )
     )
 
 
