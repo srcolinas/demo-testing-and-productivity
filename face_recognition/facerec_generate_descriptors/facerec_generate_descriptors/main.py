@@ -20,7 +20,7 @@ def _main():
         produce_images(
             cv2.VideoCapture(0),
             VisualizerWithComputerAndStorage(computer),
-            read_signal()
+            read_signal
         )
     )
 
