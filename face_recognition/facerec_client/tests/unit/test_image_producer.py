@@ -1,3 +1,4 @@
+import cv2
 import pytest
 import numpy as np
 
@@ -15,7 +16,10 @@ def test_yield_what_visualizes(image: ImageType):
         ),
         start=1,
     ):
-        np.testing.assert_array_equal(img, image * i)
+        decoded = cv2.imdecode(
+            np.frombuffer(img, dtype=np.uint8, count=-1), cv2.IMREAD_COLOR
+        )
+        np.testing.assert_array_equal(decoded, image * i)
         np.testing.assert_array_equal(visualizer.history[i - 1], image * i)
     assert len(visualizer.history) == 2
 

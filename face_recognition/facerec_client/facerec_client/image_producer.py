@@ -1,6 +1,7 @@
 from enum import Enum, auto
 from typing import Annotated, Callable, Iterable, Protocol
 
+import cv2
 import numpy as np
 
 ImageType = Annotated[np.ndarray, ("hight", "width", 3, np.uint8)]
@@ -29,7 +30,7 @@ class Signal(Enum):
 
 def produce_images(
     camera: Camera, visualizer: Visualizer, signal_reader: Callable[[], Signal]
-) -> Iterable[ImageType]:
+) -> Iterable[bytes]:
     while True:
         if signal_reader() is Signal.STOP:
             break
@@ -38,7 +39,9 @@ def produce_images(
         if not read:
             break
         visualizer.show(cap)
-        yield cap
+        success, encoded = cv2.imencode(".png", cap)
+        if success:
+            yield encoded.tobytes()
 
     camera.release()
     visualizer.destroy()
