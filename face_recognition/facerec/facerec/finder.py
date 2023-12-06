@@ -43,7 +43,7 @@ def find_descriptors(location: Path, /) -> dict[str, Path]:
     """
 
     versions: dict[str, list[str]] = defaultdict(list)
-    descriptors = list(location.glob("*_.npz"))
+    descriptors = list(location.glob("*_.npy"))
     for d in descriptors:
         _, person, version, _ = d.name.split("_")
         versions[person].append(version)
@@ -53,7 +53,7 @@ def find_descriptors(location: Path, /) -> dict[str, Path]:
     def helper():
         for k, v in latest_versions.items():
             for d in descriptors:
-                if d.name.endswith(f"_{v}_.npz") and d.name.startswith(
+                if d.name.endswith(f"_{v}_.npy") and d.name.startswith(
                     f"descriptor_{k}"
                 ):
                     yield (k, d)

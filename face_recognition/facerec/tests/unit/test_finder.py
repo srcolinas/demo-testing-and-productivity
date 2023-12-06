@@ -22,15 +22,15 @@ def test_find_desriptors_latest_version(tmp_path: Path):
     location = tmp_path / "test"
     location.mkdir()
 
-    (location / "descriptor_dana_2_.npz").write_text("")
-    (location / "descriptor_dana_3_.npz").write_text("")
-    (location / "descriptor_dana_4_.npz").write_text("")
-    (location / "descriptor_sebas_4_.npz").write_text("")
-    (location / "descriptor_sebas_5_.npz").write_text("")
-    (location / "descriptor_sebas_6_.npz").write_text("")
+    (location / "descriptor_dana_2_.npy").write_text("")
+    (location / "descriptor_dana_3_.npy").write_text("")
+    (location / "descriptor_dana_4_.npy").write_text("")
+    (location / "descriptor_sebas_4_.npy").write_text("")
+    (location / "descriptor_sebas_5_.npy").write_text("")
+    (location / "descriptor_sebas_6_.npy").write_text("")
 
     descriptors = find_descriptors(location)
     assert descriptors == {
-        "dana": location / "descriptor_dana_4_.npz",
-        "sebas": location / "descriptor_sebas_6_.npz",
+        "dana": location / "descriptor_dana_4_.npy",
+        "sebas": location / "descriptor_sebas_6_.npy",
     }

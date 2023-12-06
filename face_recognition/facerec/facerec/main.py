@@ -24,7 +24,6 @@ class Service(facerec_pb2_grpc.FaceRecognitionServicer):
             known_people=load_descriptors(**descriptors),
             descriptor_computer=DlibFaceDescriptorComputer(shape, face),
         )
-
         detections = [
             facerec_pb2.Response.Detection(
                 location=facerec_pb2.Response.Location(
